@@ -1,0 +1,63 @@
+package com.adsexxxx.sess3_collections;
+
+import java.util.ArrayDeque;
+import java.util.Iterator;
+
+/**
+ * Java class that demonstrates how the ArrayDeque class works.
+ *
+ * @author Nyanjui
+ */
+public class ArrayDequeSample
+{
+
+    public static void main(String[] args)
+    {
+        ArrayDeque adObj = new ArrayDeque();
+
+        /* Add/insert various programming languages to the ArrayDeque object
+        using various methods of the ArrayDeque */
+        adObj.add("Java");
+        adObj.offer("Visual Basic"); //Added after Java
+        adObj.offerLast("C++");//Added at the end
+        adObj.offerFirst("C");//Inserted before Java
+        adObj.addFirst("C#");//Inserted before C
+
+        //Display the objects in the ArrayDeque as added/inserted above
+        System.out.println("Display the items as added ");
+        int n = 0;
+        for (Object object : adObj)
+        {
+            System.out.printf("Object at index %d -> %s\n", n, object.toString());
+            n++;
+        }
+
+        //Display the items in reverse order using a descending iterator
+        System.out.println("\nDisplay the items as in reverse order ");
+        Iterator adIterator = adObj.descendingIterator();
+        n = 0;
+        while (adIterator.hasNext())
+        {
+            System.out.printf("Object at index %d -> %s\n", n, adIterator.next());
+            n++;
+        }
+
+        //Display the first and last items in the ArrayDeque
+        System.out.println("The first item in the ArrayDeque is "
+                + adObj.peekFirst());
+        System.out.println("The last element in the ArrayDeque is"
+                + adObj.peekLast());
+
+        //Add more elements to the ArrayDeque
+        adObj.push("Python");
+        adObj.add("JavaScript");
+
+        //Display the number of elements in the ArrayDeque
+        System.out.println("The number of elements in the ArrayDeque is "
+                + adObj.size());
+
+        //Remove the first and last elements in the ArrayDeque
+        System.out.println("Removing First  Element  :" + adObj.pollFirst());
+        System.out.println("Removing Last  Element   :" + adObj.pollLast());
+    }
+}
