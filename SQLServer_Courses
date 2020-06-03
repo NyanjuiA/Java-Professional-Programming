@@ -1,0 +1,51 @@
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Java program that displays the courses offered in the college.
+ *
+ * @author a.nyanjui
+ */
+public class SQLServer_Courses
+{
+
+    /**
+     * Private class constant string that holds the SQL query to be sent to the
+     * database for execution.
+     */
+    private static final String COURSE_QUERY = "Select * from course";
+
+    //main method begins program execution
+    public static void main(String[] args)
+    {
+        //Create a list of available courses
+        List<Course> collegeCourses = new ArrayList<>();
+
+        //Use a try with resources to connect to the database
+        try (Connection conn = new SQLServer_OpenConnection().createConnection();
+                Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(COURSE_QUERY))
+        {
+            int n = 0;//Integer used for display purposes
+            while (rs.next())
+            {
+                //Add courses from the database to the list of available courses
+                collegeCourses.add(new Course(rs.getString(1), rs.getString(2),
+                        rs.getFloat(3), rs.getInt(4)));
+                //Display the details of the added course
+                System.out.println("Displaying the details of course number "
+                        + (n + 1));
+                collegeCourses.get(n).displayDetails();
+                n++;
+            }
+        } catch (SQLException sqle)
+        {
+            System.err.println(sqle.getCause());
+        }
+    }
+}
