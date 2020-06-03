@@ -1,0 +1,81 @@
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+/**
+ * Java program that will be used to add(insert) new courses into the course
+ * table.
+ *
+ * @author a.nyanjui
+ */
+public class SQLServer_InsertCourse
+{
+
+    /**
+     * Private class constant string that holds the SQL query to be sent to the
+     * database for execution.
+     */
+    private static final String COURSE_QUERY = "Select * from course";
+
+    private static final Scanner USER_INPUT
+            = new Scanner(System.in).useDelimiter("\n");
+
+    public static String[] getCourseDetails()
+    {
+        String courseValues[] = new String[4];
+        //Read in the course code
+        System.out.println("Please enter the course code ->");
+        courseValues[0] = USER_INPUT.next();
+        //Read in the course name
+        System.out.println("Please enter the course name ->");
+        courseValues[1] = USER_INPUT.next();
+        //Read in the course fee
+        System.out.println("Please enter the course fee ->");
+        courseValues[2] = USER_INPUT.next();
+        //Read in the course duration
+        System.out.println("Please enter the course duration in months ->");
+        courseValues[3] = USER_INPUT.next();
+        //Close the input stream
+        USER_INPUT.close();
+        return courseValues;
+    }
+
+    public static void main(String[] args)
+    {
+        //String array to hold the values to be inserted into the courses table
+        String userValues[] = getCourseDetails();
+
+        //Use a try with resources to connect to the database
+        try (Connection conn = new SQLServer_OpenConnection().createConnection();
+                Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(COURSE_QUERY))
+        {
+            //Move to the last row/insert row to add the new record
+            rs.moveToInsertRow();
+            //add the user's course details to the resultset
+            rs.updateString(1, userValues[0]);
+            rs.updateString(2, userValues[1]);
+            rs.updateFloat(3, Float.parseFloat(userValues[2]));
+            rs.updateInt(4, Integer.valueOf(userValues[3]));
+            //Insert the row in the course table
+            rs.insertRow();
+            /* Inform the user that the row(new course) has successfully been
+               added to the course table */
+            System.out.println("The course " + userValues[1] + 
+                    " has been successfully added to the list of courses.");
+        }catch(NumberFormatException nfe)
+        {
+            System.err.println("Sorry, the numbers entered in the "
+                    + "fee or duration are invalid.\n"
+                    + "Please enter valid values for the fee and/or duration.");
+        }
+        catch (SQLException sqle)
+        {
+            System.err.println("Sorry, the details were not added because " +
+                    sqle.getMessage());
+        }
+    }
+}
