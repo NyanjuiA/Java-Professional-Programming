@@ -1,0 +1,44 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * Java class that will be used to establish a connection to a 
+ * Microsoft SQL server database.
+ * 
+ * @author a.nyanjui
+ */
+public class SQLServer_OpenConnection
+{
+    //Class constants that will be used to connect to the database
+    private static final String DBURL = "jdbc:sqlserver://SQLSERVER2\\SQLSVR2;"
+            + "databaseName=Nyanjui_CollegeDB";
+    private static final String USERNAME = "Java_Sem2";
+    private static final String PASSWORD = "Jav@_S3m2!";
+    
+    //Non-parameterised constructor
+
+    public SQLServer_OpenConnection()
+    {
+    }
+    
+    /**
+     * Method to create a connection object to the sql server database.
+     * 
+     * @return A database connection object
+     */
+    public Connection createConnection()
+    {
+        Connection conn = null;
+        try
+        {
+            conn = DriverManager.getConnection(DBURL, USERNAME, PASSWORD);
+        } catch (SQLException sqle)
+        {
+            System.err.println("Sorry the connection to the database failed.\n"
+                    + "Please verify that the connection parameters are correct"
+                    + " and that the server is running and try again.");
+        }
+        return conn;
+    }
+}
