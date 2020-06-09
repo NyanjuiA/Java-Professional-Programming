@@ -1,0 +1,213 @@
+
+import java.awt.GridLayout;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+/**
+ *
+ * @author a.nyanjui
+ */
+public class AddNumsI18N
+{
+    //Class Fields
+    private JLabel lblFirstNum, lblSecondNum, lblSum;
+    private JTextField txtFirstNum, txtSecondNum, txtSum;
+    private JFrame frmAddition;
+    private JMenuBar mbrMenu;
+    private JMenu mnuLanguage;
+    private JRadioButtonMenuItem rdoEnglish, rdoGerman, rdoFrench;
+    private ButtonGroup bgLanguage;
+    private JButton AddButton, CancelButton;
+    
+    //Non-parameterised constructor to intantiate class objects
+    public AddNumsI18N()
+    {
+        initComponents();
+    }
+    
+    //Method to initialise components
+    private void initComponents()
+    {
+        //Set the applications look and feel
+        //SetLAF.setLookAndFeel();
+        //Instantiate the Menubar
+        mbrMenu = new JMenuBar();
+
+        //Instatiate the menu
+        mnuLanguage = new JMenu("Language");
+
+        //Instatiate the menu radio buttons
+        rdoEnglish = new JRadioButtonMenuItem("English", true);
+        rdoFrench = new JRadioButtonMenuItem("French");
+        rdoGerman = new JRadioButtonMenuItem("German");
+
+        //Event handling for the menu radio buttons
+        rdoEnglish.addActionListener((ae) ->
+        {
+            try
+            {
+                changeComponentLanguage(1);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(AddNumsI18N.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        rdoFrench.addActionListener((ae) ->
+        {
+            try
+            {
+                changeComponentLanguage(2);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(AddNumsI18N.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        rdoGerman.addActionListener((ae) ->
+        {
+            try
+            {
+                changeComponentLanguage(3);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(AddNumsI18N.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        //Instantiate the button group and add the menu radio buttons to it
+        bgLanguage = new ButtonGroup();
+        bgLanguage.add(rdoEnglish);
+        bgLanguage.add(rdoFrench);
+        bgLanguage.add(rdoGerman);
+
+        //Add the menu radio buttons to the language menu
+        mnuLanguage.add(rdoEnglish);
+        mnuLanguage.add(rdoFrench);
+        mnuLanguage.add(rdoGerman);
+
+        //Add the Language menu to the menu bar
+        mbrMenu.add(mnuLanguage);
+
+        //Instatiate the labels
+        lblFirstNum = new JLabel("First Number", JLabel.CENTER);
+        lblSecondNum = new JLabel("Second Number", JLabel.CENTER);
+        lblSum = new JLabel("Sum", JLabel.CENTER);
+
+        //Set the text on the labels
+        //Instantiate the textfields
+        txtFirstNum = new JTextField("", 10);
+        txtSecondNum = new JTextField("", 10);
+        txtSum = new JTextField("", 10);
+        //Disable the sum textfield to prevent direct user manipulation
+        txtSum.setEnabled(false);
+
+        //Instantiate the buttons
+        AddButton = new JButton("Add");
+        CancelButton = new JButton("Cancel");
+
+        //Instatiate the frame, set it layout manager and add the components
+        frmAddition = new JFrame();
+        frmAddition.setLayout(new GridLayout(4, 2, 5, 5));
+        frmAddition.add(lblFirstNum);
+        frmAddition.add(txtFirstNum);
+        frmAddition.add(lblSecondNum);
+        frmAddition.add(txtSecondNum);
+        frmAddition.add(lblSum);
+        frmAddition.add(txtSum);
+        frmAddition.add(AddButton);
+        frmAddition.add(CancelButton);
+
+        frmAddition.setTitle("Addition");
+        frmAddition.setDefaultCloseOperation(3);
+        frmAddition.setLocationRelativeTo(null);
+        frmAddition.setJMenuBar(mbrMenu);
+        frmAddition.pack();
+        frmAddition.setVisible(true);
+    }
+    
+    private void changeComponentLanguage(int n) throws IOException
+    {
+        switch (n)
+        {
+            case 1:
+                Properties engProp = new Properties();
+                engProp.load(new FileReader("./src/res_bundle/addition.properties"));
+                //Change Frame title
+                frmAddition.setTitle(engProp.getProperty("Addition"));
+                //Change Menu bar texts
+                mnuLanguage.setText(engProp.getProperty("Language"));
+                //Change Menu bar item texts
+                rdoEnglish.setText(engProp.getProperty("English"));
+                rdoFrench.setText(engProp.getProperty("French"));
+                rdoGerman.setText(engProp.getProperty("German"));
+                //Change Label text
+                lblFirstNum.setText(engProp.getProperty("FirstNum"));
+                lblSecondNum.setText(engProp.getProperty("SecondNum"));
+                lblSum.setText(engProp.getProperty("Sum"));
+                //Change button text
+                AddButton.setText(engProp.getProperty("AddButton"));
+                CancelButton.setText(engProp.getProperty("CancelButton"));
+                break;
+            case 2:
+                Properties frProp = new Properties();
+                frProp.load(new FileReader("./src/res_bundle/addition_fr_FR.properties"));
+                //Change Frame title
+                frmAddition.setTitle(frProp.getProperty("Addition"));
+                //Change Menu bar texts
+                mnuLanguage.setText(frProp.getProperty("Language"));
+                //Change Menu bar item texts
+                rdoEnglish.setText(frProp.getProperty("English"));
+                rdoFrench.setText(frProp.getProperty("French"));
+                rdoGerman.setText(frProp.getProperty("German"));
+                //Change Label text
+                lblFirstNum.setText(frProp.getProperty("FirstNum"));
+                lblSecondNum.setText(frProp.getProperty("SecondNum"));
+                lblSum.setText(frProp.getProperty("Sum"));
+                //Change button text
+                AddButton.setText(frProp.getProperty("AddButton"));
+                CancelButton.setText(frProp.getProperty("CancelButton"));
+                break;
+            case 3:
+                Properties deProp = new Properties();
+                deProp.load(new FileReader("./src/res_bundle/addition_de_DE.properties"));
+                //Change Frame title
+                frmAddition.setTitle(deProp.getProperty("Addition"));
+                //Change Menu bar texts
+                mnuLanguage.setText(deProp.getProperty("Language"));
+                //Change Menu bar item texts
+                rdoEnglish.setText(deProp.getProperty("English"));
+                rdoFrench.setText(deProp.getProperty("French"));
+                rdoGerman.setText(deProp.getProperty("German"));
+                //Change Label text
+                lblFirstNum.setText(deProp.getProperty("FirstNum"));
+                lblSecondNum.setText(deProp.getProperty("SecondNum"));
+                lblSum.setText(deProp.getProperty("Sum"));
+                //Change button text
+                AddButton.setText(deProp.getProperty("AddButton"));
+                CancelButton.setText(deProp.getProperty("CancelButton"));
+                break;
+        }
+    }
+
+    //main method begins program execution
+    public static void main(String[] args)
+    {
+        SwingUtilities.invokeLater(() ->
+        {
+            AddNumsI18N ai18n = new AddNumsI18N();
+        });
+    }
+}
